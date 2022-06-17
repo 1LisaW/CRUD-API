@@ -131,5 +131,4 @@ const server = createServer((request: IncomingMessage, response: ServerResponse)
 
 })
 export default server
-server.listen(process.env.PORT);
 

@@ -28,7 +28,6 @@ class Users {
         this._statusCode = code;
     }
     setData(data) {
-        console.log(data);
         if ('name' in data && 'age' in data && 'hobbies' in data) {
             this._storage.push(Object.assign(Object.assign({}, data), { 'id': (0, uuid_1.v4)() }));
             this._statusCode = 201;

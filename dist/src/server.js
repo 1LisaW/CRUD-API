@@ -3,12 +3,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.server = void 0;
 const http_1 = require("http");
 const users_1 = require("./users");
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const validateUrl = function (request) {
+    console.log('pid: ', process.pid);
     const url = request.url || '';
     const pathArray = url.trim().split('/');
     const possibleDir = pathArray.slice(0, 3).join('/');
@@ -41,11 +41,10 @@ const isValidIncomingData = function (data) {
 };
 const server = (0, http_1.createServer)((request, response) => {
     const { url, id } = validateUrl(request);
-    console.log(url, "", id, "");
     //Requests to non-existing endpoints
     if (url === null) {
         response.writeHead(404, { 'Content-type': 'application/json' });
-        response.end('Error: Requests to non-existing endpoints');
+        response.end(JSON.stringify('Error: Requests to non-existing endpoints'));
         return;
     }
     //Requests to /api/users
@@ -57,7 +56,6 @@ const server = (0, http_1.createServer)((request, response) => {
                 request.on("data", function (chunk) {
                     chunks.push(chunk);
                 });
-                console.log('chunks', chunks.join().toString());
                 request.on("end", function () {
                     try {
                         const incomingDataObj = JSON.parse(chunks.join().toString());
@@ -65,17 +63,16 @@ const server = (0, http_1.createServer)((request, response) => {
                             users_1.UsersInstance.setData(incomingDataObj) :
                             users_1.UsersInstance.errorMessage;
                         response.writeHead(users_1.UsersInstance.statusCode, { "Content-Type": "application/json" });
-                        response.end(data);
+                        response.end(JSON.stringify(data));
                     }
                     catch (_a) {
                         response.writeHead(500, { "Content-Type": "application/json" });
-                        response.end('Error: Server error');
+                        response.end(JSON.stringify('Error: Server error'));
                     }
                 });
                 break;
             }
             case 'GET': {
-                console.log('in GET method');
                 const data = users_1.UsersInstance.getAllData();
                 response.writeHead(users_1.UsersInstance.statusCode, { "Content-Type": "application/json" });
                 response.end(JSON.stringify(data));
@@ -83,7 +80,7 @@ const server = (0, http_1.createServer)((request, response) => {
             }
             default: {
                 response.writeHead(404, { "Content-Type": "application/json" });
-                response.end('This method didn\'t allowed with this url');
+                response.end(JSON.stringify('This method didn\'t allowed with this url'));
             }
         }
     }
@@ -95,18 +92,17 @@ const server = (0, http_1.createServer)((request, response) => {
                     chunks.push(chunk);
                 });
                 request.on("end", function () {
-                    console.log(chunks.join().toString());
                     try {
                         const incomingDataObj = JSON.parse(chunks.join().toString());
                         const data = isValidIncomingData(incomingDataObj) ?
                             users_1.UsersInstance.updateUser(incomingDataObj, id) :
                             users_1.UsersInstance.errorMessage;
                         response.writeHead(users_1.UsersInstance.statusCode, { "Content-Type": "application/json" });
-                        response.end(data);
+                        response.end(JSON.stringify(data));
                     }
                     catch (_a) {
                         response.writeHead(500, { "Content-Type": "application/json" });
-                        response.end('Error: Server error');
+                        response.end(JSON.stringify('Error: Server error'));
                     }
                 });
                 break;
@@ -125,13 +121,10 @@ const server = (0, http_1.createServer)((request, response) => {
             }
             default: {
                 response.writeHead(404, { "Content-Type": "application/json" });
-                response.end('This method didn\'t allowed with this url');
+                response.end(JSON.stringify('This method didn\'t allowed with this url'));
             }
         }
-        console.log(users_1.UsersInstance.getUserById(id));
-        console.log(users_1.UsersInstance.statusCode, users_1.UsersInstance.errorMessage);
     }
 });
-exports.server = server;
-server.listen(process.env.PORT);
-//# sourceMappingURL=app.js.map
+exports.default = server;
+//# sourceMappingURL=server.js.map

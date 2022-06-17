@@ -1,7 +1,7 @@
 import request from "supertest";
-import server  from '../src/app';
+import server  from '../src/server';
 
-server.close();
+// server.close();
 
 const idList:{[key:string]:string} ={};
 const sendData ={
@@ -27,7 +27,6 @@ describe('POST /api/users', function () {
                 .post('/api/users')
                 .send(sendData.test1)
                 
-            console.log('response ',response.body);
             expect(response.statusCode).toBe(201)
             
     })
@@ -48,7 +47,6 @@ describe('PUT /api/users/${idList.test1}', function () {
                 .post('/api/users')
                 .send(sendData.test2)
                 
-            console.log('response ',response.body);
             expect(response.statusCode).toBe(201)
             
     })

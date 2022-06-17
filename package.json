@@ -2,11 +2,12 @@
   "name": "crud-api",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/app.js",
+  "main": "dist/index.js",
   "scripts": {
-    "start": "nodemon dist/app.js",
-    "start:prod": "node dist/app.js",
-    "start:dev": "cross-env nodemon --watch 'src/**/*' -e 'ts' --exec 'ts-node' src/app.ts",
+    "start": "nodemon dist/index.js",
+    "start:prod": "node dist/src/index.js",
+    "start:dev": "cross-env nodemon --watch 'src/**/*' -e 'ts' --exec 'ts-node' src/index.ts",
+    "start:multi":"cross-env nodemon --watch 'src/**/*' -e 'ts' --exec 'ts-node' src/cluster.ts",
     "test": "jest --detectOpenHandles --config ./test/jest-server.json"
   },
   "repository": {
