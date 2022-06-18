@@ -49,7 +49,6 @@ Setup desktop version of Postman to test CRUP API
 - Server should answer with status code 400 and corresponding message if request body does not contain required fields
 
 > in Body should be object with attributes:
-- id — unique identifier (string, uuid) generated on server side
 - username — user's name (string, required)
 - age — user's age (number, required)
 - hobbies — user's hobbies (array of strings or empty array, required)
@@ -71,7 +70,6 @@ Setup desktop version of Postman to test CRUP API
 - Server should answer with status code 404 and corresponding message if record with id === userId doesn't exist
 
 > in Body should be object with attributes:
-- id — unique identifier (string, uuid) generated on server side
 - username — user's name (string, required)
 - age — user's age (number, required)
 - hobbies — user's hobbies (array of strings or empty array, required)
