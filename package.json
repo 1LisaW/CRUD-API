@@ -1,0 +1,42 @@
+{
+  "name": "crud-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "nodemon dist/index.js",
+    "start:prod": "node dist/src/index.js",
+    "start:dev": "cross-env nodemon --watch 'src/**/*' -e 'ts' --exec 'ts-node' src/index.ts",
+    "start:multi":"cross-env nodemon --watch 'src/**/*' -e 'ts' --exec 'ts-node' src/cluster.ts",
+    "test": "jest --detectOpenHandles --config ./test/jest-server.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/1LisaW/CRUD-API.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/1LisaW/CRUD-API/issues"
+  },
+  "homepage": "https://github.com/1LisaW/CRUD-API#readme",
+  "devDependencies": {
+    "@babel/core": "^7.18.5",
+    "@babel/preset-env": "^7.18.2",
+    "@types/jest": "^28.1.1",
+    "@types/supertest": "^2.0.12",
+    "@types/uuid": "^8.3.4",
+    "babel-jest": "^28.1.1",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.0.1",
+    "jest": "^28.1.1",
+    "nodemon": "^2.0.16",
+    "supertest": "^6.2.3",
+    "ts-jest": "^28.0.5",
+    "ts-node": "^10.8.1",
+    "typescript": "^4.7.3"
+  },
+  "dependencies": {
+    "uuid": "^8.3.2"
+  }
+}
