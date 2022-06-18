@@ -1,4 +1,5 @@
 import { v4, validate } from 'uuid';
+import storageModel from './model'
 
 enum Args {
     'id',
@@ -17,105 +18,105 @@ interface Storage extends IncomingData {
 }
 
 class Users {
-    private _storage: Storage[]
-    private _statusCode:number
-    private _errorMessage:string
+    public model
     constructor(){
-        this._storage = [];
-        this._statusCode = 404;
-        this._errorMessage = 'Error: Not valid path';
+        this.model = storageModel;
     }
-
     public get statusCode() {
-        return this._statusCode;
+        return this.model.statusCode;
     }
 
     public get errorMessage() {
-        return this._errorMessage;
+        return this.model.errorMessage;
     }
 
     public set errorMessage(message:string) {
-        this._errorMessage = message;
+        this.model.errorMessage = message;
     }
 
     public set statusCode(code:number) {
-        this._statusCode = code;
+        this.model.statusCode = code;
     }
 
     setData(data:IncomingData){
         if('name' in data && 'age' in data && 'hobbies' in data){
-            this._storage.push({
+            const newData:Storage = {
                 ...data,
                 'id': v4()
-            });
-            this._statusCode = 201;
+            }
+            this.model.storage.push(newData);
+            this.model.statusCode = 201;
+            return newData;
         }
         else{
-            this._statusCode = 400;
-            this._errorMessage = 'Error: Not valid data structure';
-            return this.errorMessage;
+            this.model.statusCode = 400;
+            this.model.errorMessage = 'Error: Not valid data structure';
+            return this.model.errorMessage;
         }
     }
     getAllData():Storage[]{
-        this._statusCode = 200;
-        return this._storage;
+        this.model.statusCode = 200;
+        return this.model.storage;
     }
     validateId(id:string){
         if(validate(id)){
-            this._statusCode = 404;
-            this._errorMessage = 'Error: Record doesn\'t exist'
+            this.model.statusCode = 404;
+            this.model.errorMessage = 'Error: Record doesn\'t exist'
         }
         else{
-            this._statusCode = 400; 
-            this._errorMessage = 'Error: UserId is invalid'
+            this.model.statusCode = 400; 
+            this.model.errorMessage = 'Error: UserId is invalid'
         }
     }
     getUserById(id:string){
-        const currentItem = this._storage.find( item => item.id === id );
+        const currentItem = this.model.storage.find( item => item.id === id );
         if (currentItem){
-            this._statusCode = 200;
+            this.model.statusCode = 200;
             return currentItem; 
         }
         else {
             this.validateId(id);
-            return this.errorMessage;
+            return this.model.errorMessage;
 
         };
     }
     updateUser(data:IncomingData,id:string){
         if('name' in data && 'age' in data && 'hobbies' in data){
-            const currentItemIdx = this._storage.findIndex( item => item.id === id );
+            const currentItemIdx = this.model.storage.findIndex( item => item.id === id );
             if( currentItemIdx > -1 ) {
-                this._storage[currentItemIdx] = {
+                this.model.storage[currentItemIdx] = {
                     ...data,
-                    id: this._storage[currentItemIdx].id
+                    id
                 }
-                this._statusCode = 200;
-                return '';
+                this.model.statusCode = 200;
+                return this.model.storage[currentItemIdx];
             }
             else {
                 this.validateId(id);
-                return this.errorMessage
+                return this.model.errorMessage
             }
         }
         else{
-            this._statusCode = 400;
-            this._errorMessage = 'Not valid data structure';
-            return this.errorMessage;
+            this.model.statusCode = 400;
+            this.model.errorMessage = 'Not valid data structure';
+            return this.model.errorMessage;
         }
     }
     deleteUser(id:string){
-         const currentItemIdx = this._storage.findIndex( item => item.id === id );
+         const currentItemIdx = this.model.storage.findIndex( item => item.id === id );
             if( currentItemIdx > -1 ) {
-                this._storage = [
-                    ...this._storage.slice(0,currentItemIdx),
-                    ...this._storage.slice(currentItemIdx+1)
+                const removedData = {...this.model.storage[currentItemIdx]};
+                this.model.storage = [
+                    ...this.model.storage.slice(0,currentItemIdx),
+                    ...this.model.storage.slice(currentItemIdx+1)
                 ]
-                this._statusCode = 204;
+                this.model.statusCode = 204;
+                return removedData;
+
             }
             else {
                 this.validateId(id);
-                return this.errorMessage;
+                return this.model.errorMessage;
             }
     }
 
